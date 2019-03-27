@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.zero.todoapp.services.UserService;
 
 @SpringBootApplication
 @EnableAutoConfiguration
@@ -16,5 +18,11 @@ public class TodoAppMain {
         SpringApplication.run(TodoAppMain.class, args);
         logger.info("App started");
     }
+
+    @Bean
+    public UserService getUserService() {
+        return new UserService();
+    }
+
 
 }
