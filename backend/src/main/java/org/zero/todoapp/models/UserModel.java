@@ -3,10 +3,12 @@ package org.zero.todoapp.models;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.List;
 
 @Entity
-@Table(name = "user_model", schema = "todoapp")
+@Table(name = "user_model", schema = "todolist")
 public class UserModel {
 
     @Id
@@ -14,6 +16,17 @@ public class UserModel {
     private String userName;
     @Column(name = "password")
     private String password; // hashed
+
+    @OneToMany(mappedBy = "owner")
+    private List<TaskListModel> taskLists;
+
+    public List<TaskListModel> getTaskLists() {
+        return taskLists;
+    }
+
+    public void setTaskLists(List<TaskListModel> taskLists) {
+        this.taskLists = taskLists;
+    }
 
     public String getPassword() {
         return password;
