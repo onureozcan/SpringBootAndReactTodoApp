@@ -1,0 +1,22 @@
+body {
+    overflow-x: hidden;
+}
+.navbar {
+    background-color: #31708f;
+    border-color:#31708f;
+    border-radius:0;
+}
+.navbar-brand {
+    color:white !important;
+}
+.btn {
+    border-width:0 !important;
+    border-radius:0 !important;
+    margin: 5px;
+    -webkit-box-shadow: 0px 0px 14px -1px rgba(0,0,0,0.23);
+    -moz-box-shadow: 0px 0px 14px -1px rgba(0,0,0,0.23);
+    box-shadow: 0px 0px 14px -1px rgba(0,0,0,0.23);
+}
+.float-right {
+    float:right !important;
+}
