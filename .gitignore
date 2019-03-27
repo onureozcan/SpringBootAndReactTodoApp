@@ -1,4 +1,5 @@
 .idea/*
+target/*
 frontend/node/*
 frontend/node_modules/*
 *.jar

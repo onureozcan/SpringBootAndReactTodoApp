@@ -23,7 +23,8 @@
                 <configuration>
                     <nodeVersion>${node.version}</nodeVersion>
                     <npmVersion>${npm.version}</npmVersion>
-                    <nodeWorkingDirectory>${project.basedir}</nodeWorkingDirectory>
+                    <workingDirectory>${project.basedir}</workingDirectory>
+                    <installDirectory>${project.basedir}/node</installDirectory>
                 </configuration>
                 <executions>
                     <!--this installs node and npm-->
@@ -53,7 +54,7 @@
                         <configuration>
                             <arguments>start</arguments>
                         </configuration>
-                        <phase>validate</phase>
+                        <phase>package</phase>
                     </execution>
                 </executions>
             </plugin>
