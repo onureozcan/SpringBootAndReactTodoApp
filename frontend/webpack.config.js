@@ -25,6 +25,7 @@ module.exports = {
     devServer: {
         contentBase: './public',
         hot: true,
-        port: 1024
+        port: 1024,
+        historyApiFallback: true // this solves react router refresh issue
     }
 };
