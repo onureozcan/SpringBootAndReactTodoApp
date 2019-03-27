@@ -2,17 +2,24 @@
 
 An example todo list app using spring boot and react
 
-**Backend port**:8080  
+**Backend port**: 8080  
 **Frontend port**: 1024
 
 ##### Build Using Maven:
-    
-    mvn --package
 
-it builds both front and backend
- projects and starts serving them.
+frontend:
+    
+    cd frontend; mvn clean package 
+
+It starts serving frontend project at port 1024.
+
+Backend:
+
+    cd backend; mvn clean package; mvn spring-boot:run
+    
+ This command above builds a jar and starts serving backend project at port 8080.
  It expects mysql to be up and running at 3306.  
- Uses maven frontend plugin to serve frontend
+
 ##### Build Using Docker:
 
 Run command:
