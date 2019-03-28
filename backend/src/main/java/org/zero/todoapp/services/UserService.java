@@ -20,4 +20,10 @@ public class UserService {
         logger.debug("register:" + userName + "| pwd:" + password);
         userRepository.save(new UserModel(userName, PasswordHashingUtils.hashUserPassword(password)));
     }
+
+    public boolean validate(String userName, String password) throws NoSuchAlgorithmException {
+        return userRepository.findUserByUserNameAndPassword(
+                userName,PasswordHashingUtils.hashUserPassword(password)
+        ) != null;
+    }
 }

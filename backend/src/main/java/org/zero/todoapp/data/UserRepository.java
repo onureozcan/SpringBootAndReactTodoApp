@@ -7,4 +7,5 @@ import org.zero.todoapp.models.UserModel;
 
 @Transactional
 public interface UserRepository extends JpaRepository<UserModel, String> {
+    UserModel findUserByUserNameAndPassword(String userName, String password);
 }

@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.zero.todoapp.security.WebTokenProvider;
 import org.zero.todoapp.services.UserService;
 
 import java.security.NoSuchAlgorithmException;
@@ -25,9 +26,12 @@ public class AuthApiController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody Map<String, Object> payload) {
+    public String login(@RequestBody Map<String, Object> payload) throws NoSuchAlgorithmException {
         String userName = payload.get("user") + "";
         String password = payload.get("pwd") + "";
+        if (userService.validate(userName, password)) {
+            return WebTokenProvider.createJsonWebToken(userName);
+        }
         return null;
     }
 }
