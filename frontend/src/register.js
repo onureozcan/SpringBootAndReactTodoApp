@@ -23,6 +23,7 @@ class Register extends React.Component {
                 AuthDataSource.register(this.state.userName, this.state.pwd1, (args) => {
                     if (args.success) {
                         alert("success");
+                        this.navigate("/");
                     }
                 });
             } else {

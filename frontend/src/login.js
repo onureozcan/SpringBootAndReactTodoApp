@@ -1,6 +1,7 @@
 import React from "react";
 import {withRouter} from "react-router-dom";
 import AuthDataSource from './data/auth';
+import cookie from 'react-cookies'
 
 class Login extends React.Component {
 
@@ -21,6 +22,8 @@ class Login extends React.Component {
             AuthDataSource.login(this.state.userName, this.state.pwd, (args) => {
                 if (args.success) {
                     alert("login was successful, we will redirect you in a second");
+                    cookie.save('jwt', args.data);
+                    this.navigate("/");
                 } else {
                     alert("invalid credentials");
                 }
