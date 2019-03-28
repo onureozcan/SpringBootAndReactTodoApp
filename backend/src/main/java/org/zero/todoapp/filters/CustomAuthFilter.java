@@ -27,13 +27,28 @@ public class CustomAuthFilter implements Filter {
             throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        String jwt = request.getHeader("jwt") + "";
         String path = request.getRequestURI().substring(request.getContextPath().length());
-        if (path.equals("/auth/login") || path.equals("/auth/register") ||
-                WebTokenProvider.verifyToken(jwt) != null) {
+        if (path.equals("/auth/login") || path.equals("/auth/register")) {
             filterChain.doFilter(request, response);
         } else {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            String jwt = request.getHeader("jwt");
+            if (jwt == null || jwt.equals("null")) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+            } else {
+                String userName = null;
+                try {
+                    userName = WebTokenProvider.verifyToken(jwt);
+                    request.setAttribute("userName", userName);
+                    if (userName != null) {
+                        filterChain.doFilter(request, response);
+                    } else {
+                        response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+                    }
+                } catch (Throwable ex) {
+                    ex.printStackTrace();
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+                }
+            }
         }
     }
 }
