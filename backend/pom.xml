@@ -14,6 +14,9 @@
         <compiler.plugin.version>3.6.1</compiler.plugin.version>
         <assembly.plugin.version>2.6</assembly.plugin.version>
         <main.class>org.zero.todoapp.TodoAppMain</main.class>
+        <jsontoken.version>1.0</jsontoken.version>
+        <guava.version>18.0</guava.version>
+        <commons.verison>3.8.1</commons.verison>
         <java.version>1.8</java.version>
     </properties>
 
@@ -56,6 +59,22 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.googlecode.jsontoken</groupId>
+            <artifactId>jsontoken</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>18.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons.verison}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
