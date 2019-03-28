@@ -1,6 +1,14 @@
+import cookie from "react-cookies";
+
 const base = "http://localhost:8080";
 
 class AuthDataSource {
+
+    static loginSubscribers = [];
+
+    static listenLoginChange(fnc) {
+        AuthDataSource.loginSubscribers.push(fnc);
+    }
 
     static register(userName, password, callback) {
         $.ajax({
@@ -36,8 +44,16 @@ class AuthDataSource {
                 pwd: password
             }),
             success: (data) => {
+                let success = (data || "").length > 1;
+                if (success) {
+                    cookie.save('jwt', data);
+                    setTimeout(() => {
+                        // notify everyone that a login event occured!
+                        this.loginSubscribers.forEach(x => x());
+                    }, 1000);
+                }
                 callback({
-                    success: (data || "").length > 1,
+                    success: success,
                     data: data
                 });
             },
@@ -48,6 +64,14 @@ class AuthDataSource {
                 });
             }
         });
+    }
+
+    static logout(){
+        cookie.remove("jwt");
+        setTimeout(() => {
+            // notify everyone that a logout event occured!
+            this.loginSubscribers.forEach(x => x());
+        }, 1000);
     }
 }
 
