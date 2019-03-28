@@ -7,7 +7,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.zero.todoapp.filters.CORSFilter;
 import org.zero.todoapp.services.UserService;
+
+import javax.servlet.Filter;
 
 @SpringBootApplication
 @EnableAutoConfiguration
@@ -30,6 +33,11 @@ public class TodoAppMain {
         return ()->{
 
         };
+    }
+
+    @Bean
+    public Filter getCorsFilter() {
+        return new CORSFilter();
     }
 
 }

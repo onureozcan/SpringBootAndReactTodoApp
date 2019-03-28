@@ -20,6 +20,14 @@ public class UserModel {
     @OneToMany(mappedBy = "owner")
     private List<TaskListModel> taskLists;
 
+    public UserModel() {
+    }
+
+    public UserModel(String userName, String password) {
+        this.userName = userName;
+        this.password = password;
+    }
+
     public List<TaskListModel> getTaskLists() {
         return taskLists;
     }
