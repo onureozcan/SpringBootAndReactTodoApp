@@ -16,7 +16,7 @@ class ActionBar extends React.Component {
                 loggedIn: typeof cookie.load("jwt") !== "undefined"
             });
             setTimeout(()=>{
-                this.navigate("/");
+                this.navigate("/"+(this.state.loggedIn ? "":"login"));
             },1000);
         });
     }
