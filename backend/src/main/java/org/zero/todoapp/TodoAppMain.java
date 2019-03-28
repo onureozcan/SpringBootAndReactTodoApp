@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.zero.todoapp.filters.CORSFilter;
+import org.zero.todoapp.filters.CustomAuthFilter;
 import org.zero.todoapp.services.UserService;
 
 import javax.servlet.Filter;
@@ -40,4 +41,8 @@ public class TodoAppMain {
         return new CORSFilter();
     }
 
+    @Bean
+    public Filter getAuthFilter() {
+        return new CustomAuthFilter();
+    }
 }
