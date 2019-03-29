@@ -13,7 +13,9 @@ class Task extends React.Component {
             newTaskName: "",
             newTaskDescription: "",
             newTaskDueDate: "",
-            searchParameter: ""
+            searchParameter: "",
+            sortField: "name",
+            sortReverse: false
         };
     }
 
@@ -29,16 +31,27 @@ class Task extends React.Component {
             if (args.success) {
                 if (this.state.searchParameter != "") {
                     args.data = args.data
-                        .filter((x)=>x.name.indexOf(this.state.searchParameter)!= -1);
+                        .filter((x) => x.name.indexOf(this.state.searchParameter) != -1);
                 }
+                if (this.state.sortField != "") {
+                    args.data.sort((x, y) => {
+                        let v1 = x[this.state.sortField];
+                        let v2 = y[this.state.sortField];
+                        return v1 > v2 ? 1 : -1;
+                    });
+                    if (this.state.sortReverse){
+                        args.data = args.data.reverse();
+                    }
+                }
+
                 this.setState({
                     list: args.data
-                })
+                });
             }
         });
     }
 
-    getSearch(){
+    getSearch() {
         this.getTasks();
     }
 
@@ -176,6 +189,10 @@ class Task extends React.Component {
                 <div>
                     <div className="col-sm-11">
                         <h1 className="no-margin">Tasks</h1>
+                        <small>
+                            sorder by:{this.state.sortField}
+                            { this.state.sortReverse ? " descending":" ascending"}
+                        </small>
                     </div>
                     <div className="col-sm-1">
                         <button className="btn btn-success" onClick={() => {
@@ -197,7 +214,7 @@ class Task extends React.Component {
                                placeholder="Search for..."/>
                         <span className="input-group-btn">
                         <button className="btn btn-primary no-margin"
-                                onClick={()=>this.getTasks()} type="button">Search!</button>
+                                onClick={() => this.getTasks()} type="button">Search!</button>
                     </span>
                     </div>
                 </div>
@@ -209,10 +226,38 @@ class Task extends React.Component {
                                     <table className="table">
                                         <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Description</th>
-                                            <th>Due Date</th>
-                                            <th>Status</th>
+                                            <th onClick={() => {
+                                                this.setState({
+                                                    sortField: "name",
+                                                    sortReverse: !this.state.sortReverse
+                                                });
+                                                this.getTasks();
+                                            }}>Name
+                                            </th>
+                                            <th onClick={() => {
+                                                this.setState({
+                                                    sortField: "description",
+                                                    sortReverse: !this.state.sortReverse
+                                                });
+                                                this.getTasks();
+                                            }}>Description
+                                            </th>
+                                            <th onClick={() => {
+                                                this.setState({
+                                                    sortField: "dueDate",
+                                                    sortReverse: !this.state.sortReverse
+                                                });
+                                                this.getTasks();
+                                            }}>Due Date
+                                            </th>
+                                            <th onClick={() => {
+                                                this.setState({
+                                                    sortField: "status",
+                                                    sortReverse: !this.state.sortReverse
+                                                });
+                                                this.getTasks();
+                                            }}>Status
+                                            </th>
                                             <th>Depends On</th>
                                             <th>Options</th>
                                         </tr>
