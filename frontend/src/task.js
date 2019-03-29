@@ -56,7 +56,15 @@ class Task extends React.Component {
     }
 
     deleteTask(taskId) {
-
+        if (window.confirm("Are you sure deleting this item?")) {
+            TaskDataSource.delete(taskId, (args) => {
+                if (args.success) {
+                    this.getTasks();
+                } else {
+                    alert(args.data);
+                }
+            });
+        }
     }
 
     renderNewTaskPage() {
@@ -109,6 +117,16 @@ class Task extends React.Component {
         return formatted_date;
     }
 
+    completeTask(taskId) {
+        TaskDataSource.complete(taskId, (args) => {
+            if (args.success) {
+                this.getTasks();
+            } else {
+                alert(args.data);
+            }
+        });
+    }
+
     render() {
         const tasks = [];
         for (let i = 0; i < this.state.list.length; i++) {
@@ -117,20 +135,24 @@ class Task extends React.Component {
                 <tr key={i}>
                     <td>{item.name}</td>
                     <td>
-                        <div style={{"max-width":"200px"}}>
+                        <div style={{"max-width": "200px"}}>
                             {item.description}</div>
                     </td>
                     <td>{this.format(new Date(item.dueDate)) + ""}</td>
                     <td>{item.status == 1 ? "COMPLETED" : item.dueDate > new Date().getTime() ? "OPEN" : "EXPIRED"}</td>
+                    <td>{(item.dependsOn || {name: "no dependency"}).name}</td>
                     <td>
                         <button className="btn btn-danger" onClick={() => {
                             this.deleteTask(item.id);
                         }}>delete
                         </button>
-                        <button className="btn btn-primary" onClick={() => {
-                            this.completeTask(item.id);
-                        }}>complete
-                        </button>
+                        {
+                            item.status == 1 ? <span></span> :
+                                <button className="btn btn-primary" onClick={() => {
+                                    this.completeTask(item.id);
+                                }}>complete
+                                </button>
+                        }
                         <button className="btn btn-default" onClick={() => {
                             this.dependency(item.id);
                         }}>add dependency
@@ -175,6 +197,7 @@ class Task extends React.Component {
                                             <th>Description</th>
                                             <th>Due Date</th>
                                             <th>Status</th>
+                                            <th>Depends On</th>
                                             <th>Options</th>
                                         </tr>
                                         </thead>

@@ -55,4 +55,23 @@ public class TaskApiController {
         taskRepository.save(task);
 
     }
+
+    @PostMapping("complete")
+    public void complete(@RequestBody Map<String, Object> payload) {
+        String taskId = String.valueOf((Object) payload.get(Constants.STR_TASK_ID));
+        TaskModel task = taskRepository.findById(Integer.parseInt(taskId)).get();
+        task.setStatus(Constants.TASK_STATUS_COMPLETED);
+        taskRepository.save(task);
+    }
+
+    @PostMapping("delete")
+    public void delete(@RequestBody Map<String, Object> payload) {
+        String taskId = String.valueOf((Object) payload.get(Constants.STR_TASK_ID));
+        TaskModel task = taskRepository.findById(Integer.parseInt(taskId)).get();
+        task.setStatus(Constants.TASK_STATUS_COMPLETED);
+        if (task.getDependsOn() != null) {
+            throw new RuntimeException("this task is dependent to " + task.getDependsOn().getName());
+        }
+        taskRepository.delete(task);
+    }
 }

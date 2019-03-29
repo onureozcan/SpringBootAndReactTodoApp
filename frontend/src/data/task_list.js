@@ -76,7 +76,7 @@ class TaskListDataSource {
             },
             error: (data) => {
                 if (data.status = "401") {
-                    //AuthDataSource.logout();
+                    AuthDataSource.logout();
                 }
                 callback({
                     success: false,

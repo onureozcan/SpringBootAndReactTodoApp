@@ -62,6 +62,64 @@ class TaskDataSource {
             }
         });
     }
+
+    static complete(taskId, callback) {
+        $.ajax({
+            url: base + "/task/complete",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("authorization", cookie.load("authorization"));
+            },
+            type: "Post",
+            contentType: 'application/json',
+            data: JSON.stringify({
+                taskId:taskId
+            }),
+            success: (data) => {
+                callback({
+                    success: true,
+                    data: data
+                });
+            },
+            error: (data) => {
+                if (data.status = "401") {
+                    AuthDataSource.logout();
+                }
+                callback({
+                    success: false,
+                    data: data
+                });
+            }
+        });
+    }
+
+    static delete(taskId, callback) {
+        $.ajax({
+            url: base + "/task/delete",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("authorization", cookie.load("authorization"));
+            },
+            type: "Post",
+            contentType: 'application/json',
+            data: JSON.stringify({
+                taskId:taskId
+            }),
+            success: (data) => {
+                callback({
+                    success: true,
+                    data: data
+                });
+            },
+            error: (data) => {
+                if (data.status = "401") {
+                    AuthDataSource.logout();
+                }
+                callback({
+                    success: false,
+                    data: data
+                });
+            }
+        });
+    }
 }
 
 export default TaskDataSource;
