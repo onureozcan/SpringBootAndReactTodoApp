@@ -46,7 +46,7 @@ class AuthDataSource {
             success: (data) => {
                 let success = (data || "").length > 1;
                 if (success) {
-                    cookie.save('jwt', data);
+                    cookie.save('authorization', data);
                     setTimeout(() => {
                         // notify everyone that a login event occured!
                         this.loginSubscribers.forEach(x => x());
@@ -67,7 +67,7 @@ class AuthDataSource {
     }
 
     static logout(){
-        cookie.remove("jwt");
+        cookie.remove("authorization");
         setTimeout(() => {
             // notify everyone that a logout event occured!
             this.loginSubscribers.forEach(x => x());

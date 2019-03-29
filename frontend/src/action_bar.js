@@ -8,12 +8,12 @@ class ActionBar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            loggedIn: typeof cookie.load("jwt") !== "undefined"
+            loggedIn: typeof cookie.load("authorization") !== "undefined"
         }
         AuthDataSource.listenLoginChange(()=>{
             console.log("event!");
             this.setState({
-                loggedIn: typeof cookie.load("jwt") !== "undefined"
+                loggedIn: typeof cookie.load("authorization") !== "undefined"
             });
             setTimeout(()=>{
                 this.navigate("/"+(this.state.loggedIn ? "":"login"));

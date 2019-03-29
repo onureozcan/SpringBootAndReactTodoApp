@@ -31,7 +31,7 @@ public class CustomAuthFilter implements Filter {
         if (path.equals("/auth/login") || path.equals("/auth/register")) {
             filterChain.doFilter(request, response);
         } else {
-            String jwt = request.getHeader("jwt");
+            String jwt = request.getHeader("authorization");
             if (jwt == null || jwt.equals("null")) {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
             } else {
