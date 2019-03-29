@@ -55,7 +55,7 @@ public class TaskListApiController {
     }
 
     @PostMapping("delete")
-    public void addNewList(@RequestBody Map<String, Object> payload) {
+    public void deleteList(@RequestBody Map<String, Object> payload) {
         int taskListId = Integer
                 .parseInt(String.valueOf((Object) payload.get(Constants.STR_TASK_LIST_ID)));
         taskListRepository.deleteById(taskListId);
