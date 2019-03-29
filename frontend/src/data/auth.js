@@ -71,7 +71,7 @@ class AuthDataSource {
         setTimeout(() => {
             // notify everyone that a logout event occured!
             this.loginSubscribers.forEach(x => x());
-        }, 1000);
+        }, 400);
     }
 }
 

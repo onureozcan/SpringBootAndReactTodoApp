@@ -1,4 +1,5 @@
-import cookie from "react-cookies";
+import cookie from "react-cookies"
+import AuthDataSource from './auth'
 
 const base = "http://localhost:8080";
 
@@ -7,7 +8,7 @@ class TaskListDataSource {
     static listTasks(callback) {
         $.ajax({
             url: base + "/tasks/list",
-            beforeSend: function(xhr) {
+            beforeSend: function (xhr) {
                 xhr.setRequestHeader("authorization", cookie.load("authorization"));
             },
             type: "get",
@@ -19,6 +20,9 @@ class TaskListDataSource {
             },
             error: (data) => {
                 // TODO: logout when 401
+                if (data.status = "401") {
+                    AuthDataSource.logout();
+                }
                 callback({
                     success: false,
                     data: data
