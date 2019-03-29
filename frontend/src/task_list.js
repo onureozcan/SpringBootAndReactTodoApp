@@ -6,7 +6,8 @@ class TaskList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            list: []
+            list: [],
+            searchParameter: ""
         };
     }
 
@@ -17,6 +18,10 @@ class TaskList extends React.Component {
     getTasks() {
         TaskListDataSource.listTaskLists((args) => {
             if (args.success) {
+                if (this.state.searchParameter != "") {
+                    args.data = args.data
+                        .filter((x)=>x.name.indexOf(this.state.searchParameter)!= -1);
+                }
                 this.setState({
                     list: args.data
                 })
@@ -85,9 +90,13 @@ class TaskList extends React.Component {
                 </div>
                 <div className="col-sm-12 margin-top-10">
                     <div className="input-group">
-                        <input type="text" className="form-control" placeholder="Search for..."/>
+                        <input type="text" className="form-control" onInput={() => {
+                            this.setState({
+                                searchParameter: event.target.value
+                            });
+                        }} placeholder="Search for..."/>
                         <span className="input-group-btn">
-                        <button className="btn btn-primary no-margin" type="button">Search!</button>
+                        <button className="btn btn-primary no-margin" onClick={()=>this.getTasks()} type="button">Search!</button>
                     </span>
                     </div>
                 </div>

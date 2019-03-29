@@ -12,7 +12,8 @@ class Task extends React.Component {
             list: [],
             newTaskName: "",
             newTaskDescription: "",
-            newTaskDueDate: ""
+            newTaskDueDate: "",
+            searchParameter: ""
         };
     }
 
@@ -26,11 +27,19 @@ class Task extends React.Component {
         console.log("list tasks:" + this.taskListId);
         TaskDataSource.listTasks(parseInt(this.taskListId), (args) => {
             if (args.success) {
+                if (this.state.searchParameter != "") {
+                    args.data = args.data
+                        .filter((x)=>x.name.indexOf(this.state.searchParameter)!= -1);
+                }
                 this.setState({
                     list: args.data
                 })
             }
         });
+    }
+
+    getSearch(){
+        this.getTasks();
     }
 
     addNewTask() {
@@ -179,9 +188,16 @@ class Task extends React.Component {
                 </div>
                 <div className="col-sm-12 margin-top-10">
                     <div className="input-group">
-                        <input type="text" className="form-control" placeholder="Search for..."/>
+                        <input type="text" className="form-control"
+                               onInput={() => {
+                                   this.setState({
+                                       searchParameter: event.target.value
+                                   });
+                               }}
+                               placeholder="Search for..."/>
                         <span className="input-group-btn">
-                        <button className="btn btn-primary no-margin" type="button">Search!</button>
+                        <button className="btn btn-primary no-margin"
+                                onClick={()=>this.getTasks()} type="button">Search!</button>
                     </span>
                     </div>
                 </div>
