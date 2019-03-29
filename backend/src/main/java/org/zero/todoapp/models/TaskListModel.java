@@ -1,5 +1,7 @@
 package org.zero.todoapp.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -22,6 +24,7 @@ public class TaskListModel {
     private String name;
     @ManyToOne(targetEntity = UserModel.class, optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_name")
+    @JsonIgnore
     private UserModel owner;
 
     public String getName() {

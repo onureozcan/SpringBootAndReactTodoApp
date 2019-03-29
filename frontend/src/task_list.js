@@ -6,15 +6,19 @@ class TaskList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            tasks: []
+            list: []
         };
     }
 
     componentDidMount() {
-        TaskListDataSource.listTasks((args) => {
+        this.getTasks();
+    }
+
+    getTasks() {
+        TaskListDataSource.listTaskLists((args) => {
             if (args.success) {
                 this.setState({
-                    tasks: args.data
+                    list: args.data
                 })
             }
         });
@@ -24,13 +28,94 @@ class TaskList extends React.Component {
         this.props.history.push(path);
     }
 
+    addNewTaskList() {
+        let taskListName = window.prompt("Task List Name");
+        if (taskListName) {
+            TaskListDataSource.addList(taskListName, (args) => {
+                if (args.success) {
+                    this.getTasks();
+                } else {
+                    alert(args.data);
+                }
+            });
+        }
+    }
+
+    deleteTaskList(taskId) {
+        if (window.confirm("are you sure? there will be no rollback")) {
+            TaskListDataSource.deleteList(taskId, (args) => {
+                if (args.success) {
+                    this.getTasks();
+                } else {
+                    alert(args.data);
+                }
+            });
+        }
+    }
+
     render() {
+        const taskLists = [];
+        for (let i = 0; i < this.state.list.length; i++) {
+            let item = this.state.list[i];
+            taskLists.push(
+                <tr key={i}>
+                    <td>{item.name}</td>
+                    <td>
+                        <button className="btn btn-danger" onClick={() => {
+                            this.deleteTaskList(item.id);
+                        }}>delete
+                        </button>
+                    </td>
+                </tr>
+            );
+        }
+
         return (
             <div>
-                <h1>Tasks Lists</h1>
+                <div>
+                    <div className="col-sm-11">
+                        <h1 className="no-margin">Tasks Lists</h1>
+                    </div>
+                    <div className="col-sm-1">
+                        <button className="btn btn-success" onClick={() => {
+                            this.addNewTaskList()
+                        }}>+
+                        </button>
+                    </div>
+                </div>
+                <div className="col-sm-12 margin-top-10">
+                    <div className="input-group">
+                        <input type="text" className="form-control" placeholder="Search for..."/>
+                        <span className="input-group-btn">
+                        <button className="btn btn-primary no-margin" type="button">Search!</button>
+                    </span>
+                    </div>
+                </div>
+                <div className="col-sm-12 margin-top-10">
+                    {
+                        this.state.list.length > 0 ?
+                            <div className="pnl pnl-default">
+                                <div className="pnl-body">
+                                    <table className="table">
+                                        <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Options</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {taskLists}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            : <div className="alert alert-info">You have no task lists yet</div>
+                    }
+                </div>
             </div>
         );
     }
+
 }
 
 export default TaskList;

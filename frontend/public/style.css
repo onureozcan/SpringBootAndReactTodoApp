@@ -20,3 +20,9 @@ body {
 .float-right {
     float:right !important;
 }
+.no-margin {
+    margin:0px !important;
+}
+.margin-top-10 {
+    margin-top:10px !important;
+}

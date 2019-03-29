@@ -3,6 +3,7 @@ package org.zero.todoapp.filters;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.zero.todoapp.Constants;
 import org.zero.todoapp.security.WebTokenProvider;
 
 import javax.servlet.Filter;
@@ -38,7 +39,7 @@ public class CustomAuthFilter implements Filter {
                 String userName = null;
                 try {
                     userName = WebTokenProvider.verifyToken(jwt);
-                    request.setAttribute("userName", userName);
+                    request.setAttribute(Constants.STR_USER_NAME, userName);
                     if (userName != null) {
                         filterChain.doFilter(request, response);
                     } else {
