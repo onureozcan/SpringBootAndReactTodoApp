@@ -31,7 +31,9 @@ class Task extends React.Component {
             if (args.success) {
                 if (this.state.searchParameter != "") {
                     args.data = args.data
-                        .filter((x) => x.name.indexOf(this.state.searchParameter) != -1);
+                        .filter((x) => JSON.stringify(
+                            Object.values(x).join(" ")
+                        ).indexOf(this.state.searchParameter) != -1);
                 }
                 if (this.state.sortField != "") {
                     args.data.sort((x, y) => {
