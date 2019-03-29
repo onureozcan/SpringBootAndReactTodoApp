@@ -15,6 +15,7 @@ import org.zero.todoapp.models.TaskModel;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -64,13 +65,28 @@ public class TaskApiController {
         taskRepository.save(task);
     }
 
+    @PostMapping("dependency")
+    public void dependency(@RequestBody Map<String, Object> payload) {
+        String taskId = String.valueOf((Object) payload.get(Constants.STR_TASK_ID));
+        String dependencyId = String.valueOf((Object) payload.get(Constants.STR_DEPENDENCY));
+        TaskModel task = taskRepository.findById(Integer.parseInt(taskId)).get();
+        TaskModel dependency = taskRepository.findById(Integer.parseInt(dependencyId)).get();
+        task.setDependsOn(dependency);
+        taskRepository.save(task);
+    }
+
     @PostMapping("delete")
-    public void delete(@RequestBody Map<String, Object> payload) {
+    public void delete(@RequestBody Map<String, Object> payload,
+                       HttpServletRequest request,
+                       HttpServletResponse response) throws IOException {
         String taskId = String.valueOf((Object) payload.get(Constants.STR_TASK_ID));
         TaskModel task = taskRepository.findById(Integer.parseInt(taskId)).get();
         task.setStatus(Constants.TASK_STATUS_COMPLETED);
-        if (task.getDependsOn() != null) {
-            throw new RuntimeException("this task is dependent to " + task.getDependsOn().getName());
+        if (task.getDependsOn() != null
+                && task.getDependsOn().getStatus() != Constants.TASK_STATUS_COMPLETED) {
+            String ret = "this task is dependent to " + task.getDependsOn().getName();
+            response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE, ret);
+            return;
         }
         taskRepository.delete(task);
     }

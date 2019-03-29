@@ -20,7 +20,7 @@ class TaskListDataSource {
             },
             error: (data) => {
                 // TODO: logout when 401
-                if (data.status = "401") {
+                if (data.status == "401") {
                     AuthDataSource.logout();
                 }
                 callback({
@@ -48,7 +48,7 @@ class TaskListDataSource {
                 });
             },
             error: (data) => {
-                if (data.status = "401") {
+                if (data.status == "401") {
                     AuthDataSource.logout();
                 }
                 callback({
@@ -75,7 +75,7 @@ class TaskListDataSource {
                 });
             },
             error: (data) => {
-                if (data.status = "401") {
+                if (data.status == "401") {
                     AuthDataSource.logout();
                 }
                 callback({

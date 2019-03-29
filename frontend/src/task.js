@@ -15,7 +15,8 @@ class Task extends React.Component {
             newTaskDueDate: "",
             searchParameter: "",
             sortField: "name",
-            sortReverse: false
+            sortReverse: false,
+            selectedDependency: -1
         };
     }
 
@@ -41,7 +42,7 @@ class Task extends React.Component {
                         let v2 = y[this.state.sortField];
                         return v1 > v2 ? 1 : -1;
                     });
-                    if (this.state.sortReverse){
+                    if (this.state.sortReverse) {
                         args.data = args.data.reverse();
                     }
                 }
@@ -85,7 +86,7 @@ class Task extends React.Component {
                 if (args.success) {
                     this.getTasks();
                 } else {
-                    alert(args.data);
+                    alert(args.data.responseJSON.message);
                 }
             });
         }
@@ -141,6 +142,23 @@ class Task extends React.Component {
         return formatted_date;
     }
 
+    addDependency(taskId) {
+        if (this.state.selectedDependency == -1) {
+            alert("no dependency was chosen. please choose a dependency from the task list");
+            return;
+        }
+        TaskDataSource.addDependency(taskId, this.state.selectedDependency, (args) => {
+            if (args.success) {
+                this.getTasks();
+            } else {
+                alert(args.data.message);
+            }
+        });
+        this.setState({
+            selectedDependency: -1
+        });
+    }
+
     completeTask(taskId) {
         TaskDataSource.complete(taskId, (args) => {
             if (args.success) {
@@ -152,9 +170,11 @@ class Task extends React.Component {
     }
 
     render() {
+        const taskOptions = [<option value="-1">select a dependency to assign</option>];
         const tasks = [];
         for (let i = 0; i < this.state.list.length; i++) {
             let item = this.state.list[i];
+            taskOptions.push(<option value={item.id}>{item.name}</option>);
             tasks.push(
                 <tr key={i}>
                     <td>{item.name}</td>
@@ -166,21 +186,24 @@ class Task extends React.Component {
                     <td>{item.status == 1 ? "COMPLETED" : item.dueDate > new Date().getTime() ? "OPEN" : "EXPIRED"}</td>
                     <td>{(item.dependsOn || {name: "no dependency"}).name}</td>
                     <td>
-                        <button className="btn btn-danger" onClick={() => {
-                            this.deleteTask(item.id);
-                        }}>delete
-                        </button>
-                        {
-                            item.status == 1 ? <span></span> :
-                                <button className="btn btn-primary" onClick={() => {
-                                    this.completeTask(item.id);
-                                }}>complete
-                                </button>
-                        }
-                        <button className="btn btn-default" onClick={() => {
-                            this.dependency(item.id);
-                        }}>add dependency
-                        </button>
+                        <p>
+                            <button className="btn btn-danger" onClick={() => {
+                                this.deleteTask(item.id);
+                            }}>delete
+                            </button>
+                            {
+                                item.status == 1 ? <span></span> :
+                                    <button className="btn btn-primary" onClick={() => {
+                                        this.completeTask(item.id);
+                                    }}>complete
+                                    </button>
+                            }</p>
+                        <p>
+                            <button className="btn btn-default" onClick={() => {
+                                this.addDependency(item.id);
+                            }}>add dependency
+                            </button>
+                        </p>
                     </td>
                 </tr>
             );
@@ -193,7 +216,7 @@ class Task extends React.Component {
                         <h1 className="no-margin">Tasks</h1>
                         <small>
                             sorder by:{this.state.sortField}
-                            { this.state.sortReverse ? " descending":" ascending"}
+                            {this.state.sortReverse ? " descending" : " ascending"}
                         </small>
                     </div>
                     <div className="col-sm-1">
@@ -221,6 +244,13 @@ class Task extends React.Component {
                     </div>
                 </div>
                 <div className="col-sm-12 margin-top-10">
+                    <select value={this.state.selectedDependency} onChange={() => {
+                        console.log("change:"+event.target.value);
+                        this.setState({
+                            selectedDependency: event.target.value
+                        })
+                    }}>
+                        {taskOptions}</select>
                     {
                         this.state.list.length > 0 ?
                             <div className="pnl pnl-default">

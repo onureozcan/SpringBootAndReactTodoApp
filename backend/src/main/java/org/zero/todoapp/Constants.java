@@ -9,4 +9,5 @@ public class Constants {
     public static final String STR_DUE = "due";
     public static final String STR_TASK_ID = "taskId";
     public static final int TASK_STATUS_COMPLETED = 1;
+    public static final String STR_DEPENDENCY = "dependency";
 }

@@ -20,7 +20,7 @@ class TaskDataSource {
             },
             error: (data) => {
                 // TODO: logout when 401
-                if (data.status = "401") {
+                if (data.status == "401") {
                     AuthDataSource.logout();
                 }
                 callback({
@@ -52,7 +52,7 @@ class TaskDataSource {
                 });
             },
             error: (data) => {
-                if (data.status = "401") {
+                if (data.status == "401") {
                     AuthDataSource.logout();
                 }
                 callback({
@@ -81,7 +81,7 @@ class TaskDataSource {
                 });
             },
             error: (data) => {
-                if (data.status = "401") {
+                if (data.status == "401") {
                     AuthDataSource.logout();
                 }
                 callback({
@@ -110,7 +110,36 @@ class TaskDataSource {
                 });
             },
             error: (data) => {
-                if (data.status = "401") {
+                if (data.status == "401") {
+                    AuthDataSource.logout();
+                }
+                callback({
+                    success: false,
+                    data: data
+                });
+            }
+        });
+    }
+    static addDependency(taskId, dependencyId, callback) {
+        $.ajax({
+            url: base + "/task/dependency",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("authorization", cookie.load("authorization"));
+            },
+            type: "Post",
+            contentType: 'application/json',
+            data: JSON.stringify({
+                taskId:taskId,
+                dependency:dependencyId
+            }),
+            success: (data) => {
+                callback({
+                    success: true,
+                    data: data
+                });
+            },
+            error: (data) => {
+                if (data.status == "401") {
                     AuthDataSource.logout();
                 }
                 callback({

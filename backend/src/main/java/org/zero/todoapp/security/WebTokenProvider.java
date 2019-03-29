@@ -17,6 +17,7 @@ import net.oauth.jsontoken.discovery.VerifierProviders;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import org.apache.commons.lang3.StringUtils;
+import org.zero.todoapp.exceptions.TokenValidationException;
 
 // https://stackoverflow.com/questions/23808460/jwt-json-web-token-library-for-java
 public class WebTokenProvider {
@@ -61,7 +62,7 @@ public class WebTokenProvider {
         }
     }
 
-    public static String verifyToken(String token) {
+    public static String verifyToken(String token) throws TokenValidationException {
         try {
             final Verifier hmacVerifier = new HmacSHA256Verifier(SIGNING_KEY.getBytes());
 
@@ -99,7 +100,7 @@ public class WebTokenProvider {
             }
             return null;
         } catch (InvalidKeyException e1) {
-            throw new RuntimeException(e1);
+            throw new TokenValidationException(e1);
         }
     }
 

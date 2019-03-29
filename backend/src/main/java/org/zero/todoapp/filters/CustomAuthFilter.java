@@ -4,6 +4,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.zero.todoapp.Constants;
+import org.zero.todoapp.exceptions.TokenValidationException;
 import org.zero.todoapp.security.WebTokenProvider;
 
 import javax.servlet.Filter;
@@ -45,7 +46,7 @@ public class CustomAuthFilter implements Filter {
                     } else {
                         response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
                     }
-                } catch (Throwable ex) {
+                } catch (TokenValidationException ex) {
                     ex.printStackTrace();
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
                 }
