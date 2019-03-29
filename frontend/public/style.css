@@ -26,3 +26,6 @@ body {
 .margin-top-10 {
     margin-top:10px !important;
 }
+.text-align-right {
+    text-align: right;
+}

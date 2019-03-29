@@ -59,7 +59,7 @@ class TaskList extends React.Component {
             let item = this.state.list[i];
             taskLists.push(
                 <tr key={i}>
-                    <td>{item.name}</td>
+                    <td><a href={"/task?id="+item.id}>{item.name}</a></td>
                     <td>
                         <button className="btn btn-danger" onClick={() => {
                             this.deleteTaskList(item.id);

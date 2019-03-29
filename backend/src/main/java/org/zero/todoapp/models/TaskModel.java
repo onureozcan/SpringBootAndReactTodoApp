@@ -1,5 +1,7 @@
 package org.zero.todoapp.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "task_model", schema = "todolist")
 public class TaskModel {
 
@@ -20,12 +23,42 @@ public class TaskModel {
     private int id;
     @Column(name = "name")
     private String name;
-    @ManyToOne(targetEntity = TaskListModel.class, optional = false, fetch = FetchType.LAZY)
+    @Column(name = "description")
+    private String description;
+    @ManyToOne(targetEntity = TaskListModel.class, optional = false)
     @JoinColumn(name = "tasklist_id")
     private TaskListModel taskList;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "depends_on")
     private TaskModel dependsOn;
+    @Column(name = "due")
+    private long dueDate;
+    @Column(name = "status")
+    private int status;
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public void setDueDate(long dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public long getDueDate() {
+        return dueDate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public int getId() {
         return id;
