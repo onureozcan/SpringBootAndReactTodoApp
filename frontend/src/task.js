@@ -151,7 +151,7 @@ class Task extends React.Component {
             if (args.success) {
                 this.getTasks();
             } else {
-                alert(args.data.message);
+                alert(args.data.responseJSON.message);
             }
         });
         this.setState({
