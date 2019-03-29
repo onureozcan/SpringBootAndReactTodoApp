@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.zero.todoapp.filters.CORSFilter;
 import org.zero.todoapp.filters.CustomAuthFilter;
+import org.zero.todoapp.services.TaskService;
 import org.zero.todoapp.services.UserService;
 
 import javax.servlet.Filter;
@@ -44,5 +45,10 @@ public class TodoAppMain {
     @Bean
     public Filter getAuthFilter() {
         return new CustomAuthFilter();
+    }
+
+    @Bean
+    public TaskService getTaskService(){
+        return new TaskService();
     }
 }

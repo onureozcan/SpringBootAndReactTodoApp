@@ -12,6 +12,7 @@ import org.zero.todoapp.Constants;
 import org.zero.todoapp.data.TaskListRepository;
 import org.zero.todoapp.data.TaskRepository;
 import org.zero.todoapp.models.TaskModel;
+import org.zero.todoapp.services.TaskService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +32,9 @@ public class TaskApiController {
 
     @Autowired
     private TaskListRepository taskListRepository;
+
+    @Autowired
+    private TaskService taskService;
 
     @RequestMapping("/list/{list_id}")
     public List<TaskModel> listTasks(@PathVariable("list_id") String id) {
@@ -66,12 +70,19 @@ public class TaskApiController {
     }
 
     @PostMapping("dependency")
-    public void dependency(@RequestBody Map<String, Object> payload) {
+    public void dependency(@RequestBody Map<String, Object> payload,
+                           HttpServletRequest request,
+                           HttpServletResponse response) throws IOException {
         String taskId = String.valueOf((Object) payload.get(Constants.STR_TASK_ID));
         String dependencyId = String.valueOf((Object) payload.get(Constants.STR_DEPENDENCY));
         TaskModel task = taskRepository.findById(Integer.parseInt(taskId)).get();
         TaskModel dependency = taskRepository.findById(Integer.parseInt(dependencyId)).get();
-        task.setDependsOn(dependency);
+        if (taskService.canHaveDependency(task, dependency)) {
+            task.setDependsOn(dependency);
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE,
+                    "this task is not allowed to have a dependency on " + dependency.getName());
+        }
         taskRepository.save(task);
     }
 
@@ -82,8 +93,7 @@ public class TaskApiController {
         String taskId = String.valueOf((Object) payload.get(Constants.STR_TASK_ID));
         TaskModel task = taskRepository.findById(Integer.parseInt(taskId)).get();
         task.setStatus(Constants.TASK_STATUS_COMPLETED);
-        if (task.getDependsOn() != null
-                && task.getDependsOn().getStatus() != Constants.TASK_STATUS_COMPLETED) {
+        if (taskService.canDeleteTask(task)) {
             String ret = "this task is dependent to " + task.getDependsOn().getName();
             response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE, ret);
             return;
