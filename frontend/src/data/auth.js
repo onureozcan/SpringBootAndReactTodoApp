@@ -23,6 +23,7 @@ class AuthDataSource {
                 callback({
                     success: true
                 });
+                this.logout();
             },
             error: (data) => {
                 callback({
@@ -50,7 +51,7 @@ class AuthDataSource {
                     setTimeout(() => {
                         // notify everyone that a login event occured!
                         this.loginSubscribers.forEach(x => x());
-                    }, 1000);
+                    }, 400);
                 }
                 callback({
                     success: success,
