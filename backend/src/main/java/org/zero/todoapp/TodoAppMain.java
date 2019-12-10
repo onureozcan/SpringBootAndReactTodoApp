@@ -9,13 +9,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.zero.todoapp.filters.CORSFilter;
 import org.zero.todoapp.filters.CustomAuthFilter;
-import org.zero.todoapp.services.TaskService;
+import org.zero.todoapp.services.TaskServiceRules;
 import org.zero.todoapp.services.UserService;
 
 import javax.servlet.Filter;
 
 @SpringBootApplication
-@EnableAutoConfiguration
 public class TodoAppMain {
 
     private static Logger logger = LoggerFactory.getLogger(TodoAppMain.class);
@@ -48,7 +47,7 @@ public class TodoAppMain {
     }
 
     @Bean
-    public TaskService getTaskService(){
-        return new TaskService();
+    public TaskServiceRules getTaskService(){
+        return new TaskServiceRules();
     }
 }
