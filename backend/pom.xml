@@ -16,7 +16,7 @@
         <main.class>org.zero.todoapp.TodoAppMain</main.class>
         <jsontoken.version>1.0</jsontoken.version>
         <guava.version>18.0</guava.version>
-        <commons.verison>3.8.1</commons.verison>
+        <commons.verison>3.18.0</commons.verison>
         <java.version>1.8</java.version>
     </properties>
 
